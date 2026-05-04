@@ -28,9 +28,13 @@ const app = express();
 connectDB();
 
 // 🔐 CORS (production safe)
+
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
+  origin: process.env.FRONTEND_URL, // Ensure this is "https://blog-app-auth-frontend.vercel.app"
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 // 📦 middlewares
