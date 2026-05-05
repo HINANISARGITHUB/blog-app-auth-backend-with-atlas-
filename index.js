@@ -36,54 +36,39 @@
 
 // export default app;
 
-
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import connectDB from './config/db.js';
-import authRoutes from './routes/auth.js';
+import connectDB from './db.js';
+import authRoutes from './auth.js';
 
 const app = express();
 
+// Database connection startup
+connectDB();
 
-connectDB().catch(err => {
-  console.log("DB Error:", err);
-});
-
-
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://blog-app-auth-frontend-with-atlas.vercel.app",
-  process.env.FRONTEND_URL
-];
-
+// Middleware
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(null, true); // safe fallback (avoid crash)
-  },
+  origin: ["https://blog-app-auth-frontend-with-atlas.vercel.app", process.env.FRONTEND_URL],
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }));
-
 
 app.use(express.json());
 app.use(cookieParser());
 
+// Routes
 app.use('/api/auth', authRoutes);
 
-
+// Health Check Route
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.send('API is running perfectly...');
 });
 
-
+// Catch-all route for undefined paths to avoid 404/403 crashes
+app.all('*', (req, res) => {
+  res.status(404).json({ msg: "Route not found" });
+});
 
 export default app;
-
-
-
