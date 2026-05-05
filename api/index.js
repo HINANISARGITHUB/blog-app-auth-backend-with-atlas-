@@ -11,11 +11,13 @@ const app = express();
 connectDB();
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_URL || "https://blog-app-auth-frontend-with-atlas.vercel.app",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+app.options("*", cors());
 
 app.use(express.json());
 app.use(cookieParser());
