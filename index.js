@@ -15,7 +15,7 @@ app.use(cors({
   // Multiple origins allowed (ENV variable + Hardcoded for safety)
   origin: [
     process.env.FRONTEND_URL, 
-    'https://blog-app-auth-backend.vercel.app'
+    
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
