@@ -37,7 +37,6 @@
 // export default app;
 
 
-
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -47,12 +46,12 @@ import authRoutes from './routes/auth.js';
 
 const app = express();
 
-// ✅ DB connection
-connectDB();
 
-// ==========================
-// ✅ CORS FIX (Vercel safe)
-// ==========================
+connectDB().catch(err => {
+  console.log("DB Error:", err);
+});
+
+
 const allowedOrigins = [
   "http://localhost:5173",
   "https://blog-app-auth-frontend-with-atlas.vercel.app",
@@ -61,42 +60,30 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // mobile/postman support
-
+    if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
-    } else {
-      return callback(new Error("Blocked by CORS"));
     }
+    return callback(null, true); // safe fallback (avoid crash)
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// ✅ IMPORTANT: preflight handling (THIS FIXES YOUR ERROR)
-app.options("*", cors());
 
-// ==========================
-// Middlewares
-// ==========================
 app.use(express.json());
 app.use(cookieParser());
 
-// ==========================
-// Routes
-// ==========================
 app.use('/api/auth', authRoutes);
 
-// ==========================
-// Health route
-// ==========================
+
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// ❌ IMPORTANT: REMOVE app.listen for VERCEL
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
 export default app;
+
+
+
