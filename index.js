@@ -21,7 +21,7 @@ app.use(cors({
   // Multiple origins allowed (ENV variable + Hardcoded for safety)
   origin: [
     process.env.FRONTEND_URL, 
-    // 'https://blog-app-auth-frontend-with-atlas.vercel.app'
+     ''
   ],
 
   credentials: true,
