@@ -38,8 +38,7 @@ app.use('/api/auth', authRoutes);
 // Root route for Vercel health check
 app.get('/', (req, res) => res.send('API is running...'));
 
-// Serverless environments (like Vercel) handle ports automatically, 
-// lekin local testing ke liye ye rehne dein:
+
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
