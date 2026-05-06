@@ -14,11 +14,11 @@ connectDB();
 app.use(cors({
 
   origin: function (origin, callback) {
-    // Sab origins allow kar diye taake deployment mein masla na aaye
+   
     callback(null, true);
   },
 
-  // Multiple origins allowed (ENV variable + Hardcoded for safety)
+ 
   origin: [
     process.env.FRONTEND_URL, 
      ''
@@ -32,6 +32,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  res.send("Backend is running successfully!");
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 
@@ -44,5 +48,4 @@ if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
 
-// VERCEL KE LIYE YE LAZMI HAI
 export default app;
